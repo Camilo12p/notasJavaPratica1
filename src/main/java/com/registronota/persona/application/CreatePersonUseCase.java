@@ -1,7 +1,7 @@
 package com.registronota.persona.application;
 
-import com.registronota.persona.domain.Person;
 import com.registronota.persona.domain.PersonService;
+import com.registronota.persona.domain.entity.Person;
 
 public class CreatePersonUseCase {
 

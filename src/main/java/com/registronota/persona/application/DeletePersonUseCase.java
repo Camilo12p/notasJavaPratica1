@@ -2,8 +2,8 @@ package com.registronota.persona.application;
 
 import java.util.Optional;
 
-import com.registronota.persona.domain.Person;
 import com.registronota.persona.domain.PersonService;
+import com.registronota.persona.domain.entity.Person;
 
 public class DeletePersonUseCase {
 
