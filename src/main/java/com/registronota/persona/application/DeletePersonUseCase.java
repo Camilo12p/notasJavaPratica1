@@ -1,9 +1,7 @@
 package com.registronota.persona.application;
 
-import java.util.Optional;
 
-import com.registronota.persona.domain.PersonService;
-import com.registronota.persona.domain.entity.Person;
+import com.registronota.persona.domain.service.PersonService;
 
 public class DeletePersonUseCase {
 
@@ -17,8 +15,8 @@ public class DeletePersonUseCase {
 
     // execute 
 
-    public Optional<Person> execute(long id){
-        return personService.deletePerson(id);
+    public void execute(long id){
+        personService.deletePersonById(id);
     }
 
 }

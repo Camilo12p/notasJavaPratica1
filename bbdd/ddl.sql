@@ -20,8 +20,9 @@ CREATE TABLE person (
     name VARCHAR(30),
     last_name VARCHAR(30),
     birthday DATE,
-    email VARCHAR(30),
+    email VARCHAR(30) NOT NULL,
     phone_number BIGINT,
+    password VARCHAR(30) NOT NULL,
     -- add more information
 
     CONSTRAINT pk_person PRIMARY KEY (id),
