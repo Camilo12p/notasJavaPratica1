@@ -29,14 +29,24 @@ CREATE TABLE person (
     CONSTRAINT fk_person_typedoc FOREIGN KEY (id_type_doc) REFERENCES type_document(id)
 );
 
+CREATE TABLE status_applicant(
+    id INT AUTO_INCREMENT,
+    name VARCHAR(20),
+
+    CONSTRAINT pk_id_statusapplicant PRIMARY KEY (id)
+);
+
 
 CREATE TABLE applicant (
     id INT AUTO_INCREMENT,
     id_person BIGINT,
     entry_date DATE,
+    id_status_applicant INT,
 
     CONSTRAINT pk_applicant PRIMARY KEY (id),
-    CONSTRAINT fk_applicant_person FOREIGN KEY (id_person) REFERENCES person(id)
+    CONSTRAINT fk_applicant_person FOREIGN KEY (id_person) REFERENCES person(id),
+    CONSTRAINT fk_applicant_status FOREIGN KEY (id_status_applicant) REFERENCES status_applicant(id)
+
 );
 
 CREATE TABLE admission_test (
