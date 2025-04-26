@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import com.registronota.persona.application.CreatePersonUseCase;
 import com.registronota.persona.application.DeletePersonUseCase;
 import com.registronota.persona.domain.entity.Person;
-import com.registronota.persona.domain.service.PersonService;
+import com.registronota.persona.domain.service.PersonServiceRepository;
 import com.registronota.persona.infrastructure.in.repositorymysql.PersonRepository;
 import com.registronota.serverconfig.ConfigServer;
 

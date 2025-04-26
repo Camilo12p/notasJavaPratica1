@@ -2,18 +2,18 @@ package com.registronota.persona.application;
 
 import java.util.List;
 
-import com.registronota.persona.domain.entity.Person;
-import com.registronota.persona.domain.service.PersonService;
+import com.registronota.persona.domain.entity.dto.PersonOutDTO;
+import com.registronota.persona.domain.service.PersonServiceRepository;
 
 public class GetAllPersonUseCase {
 
-    private PersonService personService;
+    private PersonServiceRepository personService;
 
-    public GetAllPersonUseCase (PersonService personService){
+    public GetAllPersonUseCase (PersonServiceRepository personService){
         this.personService = personService;
     }
 
-    public List<Person> execute(){
+    public List<PersonOutDTO> execute(){
         return personService.getAllPerson();
     }
 

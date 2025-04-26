@@ -2,6 +2,7 @@ package com.registronota.persona.domain.entity;
 
 import java.time.LocalDate;
 
+import com.registronota.persona.domain.entity.dto.PersonEntraceDTO;
 import com.registronota.typedoc.domain.entity.TypeDocument;
 
 public class Person {
@@ -15,11 +16,29 @@ public class Person {
     private String password;
     private long phoneNumber;
     
+    
+    
+    
     // constructors
 
     
     public Person (){
 
+    }
+
+
+
+    // methods
+
+    public Person(PersonEntraceDTO personEntraceDTO, TypeDocument typeDocument){
+        this.id = personEntraceDTO.getId();
+        this.TypeDocument = typeDocument;
+        this.name = personEntraceDTO.getName();
+        this.lastName = personEntraceDTO.getLastName();
+        this.birthDate = personEntraceDTO.getBirthDate();
+        this.email = personEntraceDTO.getEmail();
+        this.password = personEntraceDTO.getPassword();
+        this.phoneNumber = personEntraceDTO.getPhoneNumber();
     }
 
     public Person

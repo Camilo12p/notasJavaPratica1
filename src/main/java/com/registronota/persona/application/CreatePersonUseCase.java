@@ -1,15 +1,15 @@
 package com.registronota.persona.application;
 
 import com.registronota.persona.domain.entity.Person;
-import com.registronota.persona.domain.service.PersonService;
+import com.registronota.persona.domain.service.PersonServiceRepository;
 
 public class CreatePersonUseCase {
 
-    private final PersonService personService;
+    private final PersonServiceRepository personService;
 
     
     // constructors
-    public CreatePersonUseCase(PersonService personService){
+    public CreatePersonUseCase(PersonServiceRepository personService){
         this.personService = personService;
     }
 

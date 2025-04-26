@@ -14,10 +14,12 @@ import java.util.Optional;
 import java.util.Properties;
 
 import com.registronota.persona.domain.entity.Person;
-import com.registronota.persona.domain.service.PersonService;
+import com.registronota.persona.domain.entity.dto.PersonEntranceLoginDTO;
+import com.registronota.persona.domain.entity.dto.PersonOutDTO;
+import com.registronota.persona.domain.service.PersonServiceRepository;
 import com.registronota.typedoc.domain.entity.TypeDocument;
 
-public class PersonRepository implements PersonService {
+public class PersonRepository implements PersonServiceRepository {
     
     private Connection connection;
 
@@ -103,14 +105,61 @@ public class PersonRepository implements PersonService {
     }
 
     @Override
-    public Optional<Person> searchPersonById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'searchPersonById'");
+    public Optional<PersonOutDTO> searchPersonById(Long id) {
+        
+        String query = """
+                SELECT 
+                    id,
+                    id_typedoc,
+                    name,
+                    lastname,
+                    birthday,
+                    email,
+                    phone_number
+
+                    td.id AS type_id
+                    td.name AS type_name
+
+                    FROM persona as p
+                    JOIN type_document as td ON p.id_typedoc = td.id
+                    WHERE p.id = ?;
+                """;
+        try{
+
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                TypeDocument typeDocument = new TypeDocument();
+                    typeDocument.setId(rs.getInt("type_id"));
+                    typeDocument.setName(rs.getString("type_name"));
+
+
+                PersonOutDTO personOutDTO = new PersonOutDTO();
+
+                    personOutDTO.setId(rs.getLong("id"));
+                    personOutDTO.setTypeDocument(typeDocument);
+                    personOutDTO.setName(rs.getString("name"));
+                    personOutDTO.setLastName(rs.getString("last_name"));
+                    personOutDTO.setBirthDate(rs.getDate("birthdate").toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate());
+                    personOutDTO.setPhoneNumber(rs.getLong("phone_number"));
+
+                return Optional.of(personOutDTO);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+
     }
 
     @Override
-    public List<Person> getAllPerson() {
-        List<Person> persons = new ArrayList<>();
+    public List<PersonOutDTO> getAllPerson() {
+        List<PersonOutDTO> persons = new ArrayList<>();
         String query = 
         """
         SELECT 
@@ -139,19 +188,19 @@ public class PersonRepository implements PersonService {
                 typeDocument.setId(rs.getInt("type_id"));
                 typeDocument.setName(rs.getString("type_name"));
                 
-                Person person = new Person(
-                    rs.getLong("id"),
-                    typeDocument,
-                    rs.getString("name"),
-                    rs.getString("last_name"),
-                    rs.getDate("birthdate").toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate(),
-                    rs.getInt("phone_number"),
-                    rs.getString("password")
-                );
+                PersonOutDTO personOutDTO = new PersonOutDTO();
 
-                persons.add(person);
+                    personOutDTO.setId(rs.getLong("id"));
+                    personOutDTO.setTypeDocument(typeDocument);
+                    personOutDTO.setName(rs.getString("name"));
+                    personOutDTO.setLastName(rs.getString("last_name"));
+                    personOutDTO.setBirthDate(rs.getDate("birthdate").toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate());
+                    personOutDTO.setPhoneNumber(rs.getLong("phone_number"));
+
+
+                persons.add(personOutDTO);
             }
 
         }catch (SQLException e){
@@ -162,6 +211,57 @@ public class PersonRepository implements PersonService {
         
     }
 
+    @Override
+    public boolean verifyEmail(String email) {
+        String query = """
+                SELECT email FROM person AS p
+                WHERE p.email = ?;
+                """;
+            
+        try{
 
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1,email);
+            ResultSet rs =  ps.executeQuery();
+
+            while (rs.next()) {
+                return false;
+            }
+
+        }catch (SQLException e ){
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    @Override
+    public Optional<PersonEntranceLoginDTO> searchPersonByEmail(String email) {
+        String query ="""
+                SELECT email,password FROM person p
+                WHERE p.email = ?;
+                """;
+        try{
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                PersonEntranceLoginDTO personEntranceLoginDTO = new PersonEntranceLoginDTO();
+                    personEntranceLoginDTO.setEmail(rs.getString("email"));
+                    personEntranceLoginDTO.setPassword(rs.getString("password"));
+                
+                return Optional.of(personEntranceLoginDTO);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
+    }
+
+
+    
+    
 
 }

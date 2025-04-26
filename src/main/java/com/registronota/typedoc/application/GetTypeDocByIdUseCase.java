@@ -5,10 +5,10 @@ import java.util.Optional;
 import com.registronota.typedoc.domai.service.TypeDocumentService;
 import com.registronota.typedoc.domain.entity.TypeDocument;
 
-public class GetByIdUseCase {
+public class GetTypeDocByIdUseCase {
     private TypeDocumentService typeDocumentService;
 
-    public GetByIdUseCase(TypeDocumentService typeDocumentService) {
+    public GetTypeDocByIdUseCase(TypeDocumentService typeDocumentService) {
         this.typeDocumentService = typeDocumentService;
     }
 

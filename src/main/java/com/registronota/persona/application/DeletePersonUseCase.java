@@ -1,15 +1,15 @@
 package com.registronota.persona.application;
 
 
-import com.registronota.persona.domain.service.PersonService;
+import com.registronota.persona.domain.service.PersonServiceRepository;
 
 public class DeletePersonUseCase {
 
-    private PersonService personService;
+    private PersonServiceRepository personService;
 
     // constructors 
 
-    public DeletePersonUseCase(PersonService personService){
+    public DeletePersonUseCase(PersonServiceRepository personService){
         this.personService = personService;
     }
 

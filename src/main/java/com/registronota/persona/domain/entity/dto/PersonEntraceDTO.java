@@ -1,10 +1,9 @@
 package com.registronota.persona.domain.entity.dto;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 
-public class PersonEntradaDTO {
+public class PersonEntraceDTO {
     private long id;
     private int idTypeDocument;
     private String name;
@@ -17,7 +16,7 @@ public class PersonEntradaDTO {
 
     // constructors
 
-    public PersonEntradaDTO (){
+    public PersonEntraceDTO (){
 
     }
 
