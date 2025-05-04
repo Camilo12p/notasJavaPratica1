@@ -9,11 +9,16 @@ import com.registronota.persona.domain.service.PersonServiceRepository;
 import com.registronota.persona.domain.service.PersonServicesValidate;
 import com.registronota.persona.infrastructure.in.repositorymysql.PersonRepository;
 import com.registronota.persona.infrastructure.in.repositorymysql.PersonValidate;
+import com.registronota.rolPerson.application.GetRolPersonByIdUseCase;
+import com.registronota.rolPerson.domain.entity.RolPerson;
+import com.registronota.rolPerson.domain.service.RolPersonServiceRepo;
+import com.registronota.rolPerson.infrastrucute.RolPersonRepository;
 import com.registronota.typedoc.application.GetTypeDocByIdUseCase;
 import com.registronota.typedoc.domai.service.TypeDocumentService;
 import com.registronota.typedoc.domain.entity.TypeDocument;
 import com.registronota.typedoc.infrastructure.in.TypeDocumentRepository;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -34,20 +39,14 @@ public class PersonPostController {
     TypeDocumentService typeDocumentService = new TypeDocumentRepository();
     GetTypeDocByIdUseCase getByIdUseCase = new GetTypeDocByIdUseCase(typeDocumentService);
 
+    RolPersonServiceRepo rPersonServiceRepo = new RolPersonRepository();
+    GetRolPersonByIdUseCase getRolPersonByIdUseCase = new GetRolPersonByIdUseCase(rPersonServiceRepo);
+
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response personPostController(PersonEntraceDTO personEntranceDTO){
-        
-         if  (
-             !personServicesValidate.validateAllFields(personEntranceDTO) ||
-             !personServicesValidate.validateEmail(personEntranceDTO.getEmail()) ||
-             !personServicesValidate.validatePassword(personEntranceDTO.getPassword())
-             ){
-                 return Response.status(Response.Status.BAD_REQUEST)
-                         .entity("{\"error\" : \" hay datos invalidos o hay campos vacios\"}")
-                             .build();
-             }
+    public Response personPostController(@Valid PersonEntraceDTO personEntranceDTO){
 
 
         if(!verifyEmailUseCase.execute(personEntranceDTO.getEmail())){
@@ -57,9 +56,10 @@ public class PersonPostController {
         }
 
         TypeDocument typeDocument = getByIdUseCase.execute(personEntranceDTO.getIdTypeDocument()).get();
+        RolPerson rolPerson = getRolPersonByIdUseCase.execute(1).get();
         
         
-        Person person = new Person(personEntranceDTO,typeDocument);
+        Person person = new Person(personEntranceDTO,typeDocument,rolPerson);
 
 
         System.out.println(person);

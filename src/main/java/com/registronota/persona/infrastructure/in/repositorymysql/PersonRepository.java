@@ -17,6 +17,7 @@ import com.registronota.persona.domain.entity.Person;
 import com.registronota.persona.domain.entity.dto.PersonEntranceLoginDTO;
 import com.registronota.persona.domain.entity.dto.PersonOutDTO;
 import com.registronota.persona.domain.service.PersonServiceRepository;
+import com.registronota.rolPerson.domain.entity.RolPerson;
 import com.registronota.typedoc.domain.entity.TypeDocument;
 
 public class PersonRepository implements PersonServiceRepository {
@@ -50,8 +51,10 @@ public class PersonRepository implements PersonServiceRepository {
              birthday,
              email,
              phone_number,
-             password) 
-             VALUES (?,?,?,?,?,?,?,?);""";
+             password,
+             id_rol_person
+             ) 
+             VALUES (?,?,?,?,?,?,?,?,?);""";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setLong(1, person.getId());
             ps.setInt(2, person.getTypeDocument().getId());
@@ -61,7 +64,7 @@ public class PersonRepository implements PersonServiceRepository {
             ps.setString(6, person.getEmail());
             ps.setLong(7, person.getPhoneNumber());
             ps.setString(8, person.getPassword());
-
+            ps.setInt(9, person.getRolPerson().getId());
 
             ps.executeUpdate();
 
@@ -75,9 +78,13 @@ public class PersonRepository implements PersonServiceRepository {
     }
 
     @Override
-    public void updatePerson(Person person) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updatePerson'");
+    public void updateRolPerson(int idRolPerson , Long idPerson ) {
+        String query = """
+                UPDATE person 
+                SET id_rol_person = ?
+                WHERE id = ?;
+                 
+                """;
     }
 
     @Override
@@ -115,13 +122,17 @@ public class PersonRepository implements PersonServiceRepository {
                     lastname,
                     birthday,
                     email,
-                    phone_number
-
-                    td.id AS type_id
+                    phone_number,
+                    id_rol_person,
+                    
+                    rp.id,
+                    rp.name,
+                    td.id AS type_id,
                     td.name AS type_name
 
                     FROM persona as p
                     JOIN type_document as td ON p.id_typedoc = td.id
+                    JOIN rol_person as rp ON p.id_rol_person = rp.id
                     WHERE p.id = ?;
                 """;
         try{
@@ -134,7 +145,10 @@ public class PersonRepository implements PersonServiceRepository {
                 TypeDocument typeDocument = new TypeDocument();
                     typeDocument.setId(rs.getInt("type_id"));
                     typeDocument.setName(rs.getString("type_name"));
-
+                
+                RolPerson rolPerson = new RolPerson();
+                    rolPerson.setId(rs.getInt("rp.id"));
+                    rolPerson.setName(rs.getString("rp.name"));
 
                 PersonOutDTO personOutDTO = new PersonOutDTO();
 
@@ -142,10 +156,11 @@ public class PersonRepository implements PersonServiceRepository {
                     personOutDTO.setTypeDocument(typeDocument);
                     personOutDTO.setName(rs.getString("name"));
                     personOutDTO.setLastName(rs.getString("last_name"));
-                    personOutDTO.setBirthDate(rs.getDate("birthdate").toInstant()
+                    personOutDTO.setBirthDate(rs.getDate("birthday").toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate());
                     personOutDTO.setPhoneNumber(rs.getLong("phone_number"));
+                    personOutDTO.setRolPerson(rolPerson);
 
                 return Optional.of(personOutDTO);
             }
@@ -169,13 +184,18 @@ public class PersonRepository implements PersonServiceRepository {
             lastname,
             birthday,
             email,
-            phone_number
-            password
-            td.id AS type_id
-            td.name AS type_name
+            phone_number,
+            id_rol_id,
+
+            td.id AS type_id,
+            td.name AS type_name,
+
+            rp.id,
+            rp.name
 
             FROM person p
-            JOIN type_document td ON p.id_typedoc = td.id;
+            JOIN type_document td ON p.id_typedoc = td.id
+            JOIN rol_person rp ON p.id_rol_person = rp.id;
         """;
         try{
 
@@ -185,8 +205,12 @@ public class PersonRepository implements PersonServiceRepository {
             while (rs.next()) {
                 
                 TypeDocument typeDocument = new TypeDocument();
-                typeDocument.setId(rs.getInt("type_id"));
-                typeDocument.setName(rs.getString("type_name"));
+                    typeDocument.setId(rs.getInt("type_id"));
+                    typeDocument.setName(rs.getString("type_name"));
+
+                RolPerson rolPerson = new RolPerson();
+                    rolPerson.setId(rs.getInt("rp.id"));
+                    rolPerson.setName(rs.getString("rp.name"));
                 
                 PersonOutDTO personOutDTO = new PersonOutDTO();
 
@@ -198,7 +222,7 @@ public class PersonRepository implements PersonServiceRepository {
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate());
                     personOutDTO.setPhoneNumber(rs.getLong("phone_number"));
-
+                    personOutDTO.setRolPerson(rolPerson);
 
                 persons.add(personOutDTO);
             }

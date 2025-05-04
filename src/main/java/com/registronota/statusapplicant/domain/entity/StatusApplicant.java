@@ -1,8 +1,13 @@
 package com.registronota.statusapplicant.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class StatusApplicant {
 
+    @JsonProperty("id_status")
     private int id;
+
+    @JsonProperty("name_status")
     private String name;
 
 

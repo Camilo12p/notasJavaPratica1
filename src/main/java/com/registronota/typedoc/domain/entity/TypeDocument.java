@@ -1,8 +1,13 @@
 package com.registronota.typedoc.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TypeDocument {
 
+    @JsonProperty("id_type_document")
     private int id;
+
+    @JsonProperty("name_type_document")
     private String name;
     
     
@@ -31,6 +36,14 @@ public class TypeDocument {
         this.name = name;
     }
 
+
+    // toString
+
+
+    @Override
+    public String toString() {
+        return "TypeDocument [id=" + id + ", name=" + name + "]";
+    }
     
 
 }

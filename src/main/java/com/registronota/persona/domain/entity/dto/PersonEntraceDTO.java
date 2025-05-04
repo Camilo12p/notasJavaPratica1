@@ -2,15 +2,58 @@ package com.registronota.persona.domain.entity.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 
 public class PersonEntraceDTO {
+
+    @JsonAlias("id_person")
+    @Min(value = 1 , message = "id no valid")
+    @NotNull(message = "id can't null")
     private long id;
+
+
+    @JsonAlias("id_type_document_person")
+    @Min(value = 1, message = "id of type document is not valid")
+    @NotNull(message = "id type can't null")
     private int idTypeDocument;
+
+    @JsonAlias("name_person")
+    @NotBlank(message = "name is mandatory")
+    @Size(max = 30, message = "the name's size is very long")
     private String name;
+
+    @JsonAlias("last_name_person")
+    @NotBlank(message = "lastname is mandatory")
+    @Size(max = 30, message = "the lastname's size is very long")
     private String lastName;
+
+    @JsonAlias("birth_date_person")
+    @Past(message = "the Date has to be past")
     private LocalDate birthDate;
+
+    @JsonAlias("email_person")
+    @Email(message = "email is not valid")
+    @NotBlank(message = "email is mandatory")
     private String email;
+    
+    @JsonAlias("password_person")
+    @NotBlank(message = "password is mandatory")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$", message = "password has to have a supperCase , a lowCase and a number")
+    @Size(min = 5, max = 30, message = "password is not valid")
     private String password;
+
+    @JsonAlias("phone_number_person")
+    @NotNull
+    @Min(value = 99999, message = "phone number is not valid")
     private long phoneNumber; 
      
 

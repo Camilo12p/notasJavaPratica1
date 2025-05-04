@@ -2,17 +2,35 @@ package com.registronota.persona.domain.entity.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.registronota.rolPerson.domain.entity.RolPerson;
 import com.registronota.typedoc.domain.entity.TypeDocument;
 
 public class PersonOutDTO {
 
+    @JsonProperty("id_person")
     private long id;
+
+    @JsonProperty("type_document_person")
     private TypeDocument TypeDocument;
+    
+    @JsonProperty("name_person")
     private String name;
+
+    @JsonProperty("last_name_person")
     private String lastName;
+
+    @JsonProperty("birth_Date_person")
     private LocalDate birthDate;
+
+    @JsonProperty("email_person")
     private String email;
+
+    @JsonProperty("phone_number_person")
     private long phoneNumber;
+
+    @JsonProperty("rol_person")
+    private RolPerson rolPerson;
     
     
     
@@ -68,8 +86,31 @@ public class PersonOutDTO {
     public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+    
 
+    public RolPerson getRolPerson() {
+        return rolPerson;
+    }
+
+
+    public void setRolPerson(RolPerson rolPerson) {
+        this.rolPerson = rolPerson;
+    }
+
+
+    // to String
+
+    @Override
+    public String toString() {
+        return "PersonOutDTO [id=" + id + ", TypeDocument=" + TypeDocument + ", name=" + name + ", lastName=" + lastName
+                + ", birthDate=" + birthDate + ", email=" + email + ", phoneNumber=" + phoneNumber + ", rolPerson="
+                + rolPerson + "]";
+    }
 
     
 
+
+
+    
+    
 }

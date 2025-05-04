@@ -9,14 +9,17 @@ import com.registronota.persona.application.VerifyEmailUseCase;
 import com.registronota.persona.domain.entity.Person;
 import com.registronota.persona.domain.entity.dto.PersonEntraceDTO;
 import com.registronota.persona.domain.service.PersonServiceRepository;
-import com.registronota.persona.domain.service.PersonServicesValidate;
 import com.registronota.persona.infrastructure.in.repositorymysql.PersonRepository;
-import com.registronota.persona.infrastructure.in.repositorymysql.PersonValidate;
+import com.registronota.rolPerson.application.GetRolPersonByIdUseCase;
+import com.registronota.rolPerson.domain.entity.RolPerson;
+import com.registronota.rolPerson.domain.service.RolPersonServiceRepo;
+import com.registronota.rolPerson.infrastrucute.RolPersonRepository;
 import com.registronota.typedoc.application.GetTypeDocByIdUseCase;
 import com.registronota.typedoc.domai.service.TypeDocumentService;
 import com.registronota.typedoc.domain.entity.TypeDocument;
 import com.registronota.typedoc.infrastructure.in.TypeDocumentRepository;
 
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -30,7 +33,6 @@ public class ApplicantPostCreateController {
     private PersonServiceRepository pRepository = new PersonRepository();
     private CreatePersonUseCase createPersonUseCase = new CreatePersonUseCase(pRepository);
     private VerifyEmailUseCase verifyEmailUseCase = new VerifyEmailUseCase(pRepository);
-    private PersonServicesValidate pValidate = new PersonValidate();
     
 
     private TypeDocumentService tRepository = new TypeDocumentRepository();
@@ -39,22 +41,16 @@ public class ApplicantPostCreateController {
     private ApplicantServiceRepository aRepository = new ApplicantRepository();
     private CreateApplicantUseCase createApplicantUseCase = new CreateApplicantUseCase(aRepository);
 
-
+    private RolPersonServiceRepo rPersonServiceRepo = new RolPersonRepository();
+    private GetRolPersonByIdUseCase getRolPersonByIdUseCase = new GetRolPersonByIdUseCase(rPersonServiceRepo);
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response postCreateController(PersonEntraceDTO personEntraceDTO){
+    public Response postCreateController(@Valid PersonEntraceDTO personEntraceDTO){
 
-        if(
-            !pValidate.validateAllFields(personEntraceDTO) ||
-            !pValidate.validateEmail(personEntraceDTO.getEmail()) ||
-            !pValidate.validatePassword(personEntraceDTO.getPassword())
-        ){
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\":\"campos vacios o no validos\"}")
-                    .build();
-        }
+
+        System.out.println(personEntraceDTO);
 
         if(
             !verifyEmailUseCase.execute(personEntraceDTO.getEmail())
@@ -68,7 +64,8 @@ public class ApplicantPostCreateController {
         TypeDocument typeDocument = getTypeDocByIdUseCase.execute(personEntraceDTO.getIdTypeDocument())
                                     .get();
 
-        Person  person = new Person(personEntraceDTO , typeDocument);
+        RolPerson rolPerson = getRolPersonByIdUseCase.execute(1).get();
+        Person  person = new Person(personEntraceDTO , typeDocument , rolPerson);
         
         createPersonUseCase.execute(person);
         createApplicantUseCase.execute(person);

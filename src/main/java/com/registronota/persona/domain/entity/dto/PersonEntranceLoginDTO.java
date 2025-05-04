@@ -1,8 +1,11 @@
 package com.registronota.persona.domain.entity.dto;
 
-public class PersonEntranceLoginDTO {
+import com.fasterxml.jackson.annotation.JsonAlias;
 
+public class PersonEntranceLoginDTO {
+    @JsonAlias("email")
     private String email;
+    @JsonAlias("password")
     private String password;
 
     // constructors

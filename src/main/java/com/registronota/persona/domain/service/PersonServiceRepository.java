@@ -10,8 +10,9 @@ import com.registronota.persona.domain.entity.dto.PersonOutDTO;
 public interface PersonServiceRepository {
 
     void createPerson(Person person);
-    void updatePerson(Person person);
+    void updateRolPerson(int idRolPerson, Long idPerson);
     void deletePersonById(Long id);
+    
     
     Optional<PersonOutDTO> searchPersonById(Long id);
     Optional<PersonEntranceLoginDTO> searchPersonByEmail(String email);

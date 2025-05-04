@@ -13,20 +13,30 @@ CREATE TABLE type_document (
     CONSTRAINT pk_type_document PRIMARY KEY (id) 
 );
 
+CREATE TABLE rol_person(
+    id INT AUTO_INCREMENT,
+    name VARCHAR(30),
+
+    CONSTRAINT pk_rol_person PRIMARY KEY (id)
+
+)
+
 CREATE TABLE person (
 
-    id BIGINT NOT NULL,
+    id BIGINT NOT NULL UNIQUE,
     id_type_doc INT,
     name VARCHAR(30),
     last_name VARCHAR(30),
     birthday DATE,
-    email VARCHAR(30) NOT NULL,
+    email VARCHAR(30) NOT NULL UNIQUE,
     phone_number BIGINT,
     password VARCHAR(30) NOT NULL,
+    id_rol_person INT
     -- add more information
 
     CONSTRAINT pk_person PRIMARY KEY (id),
-    CONSTRAINT fk_person_typedoc FOREIGN KEY (id_type_doc) REFERENCES type_document(id)
+    CONSTRAINT fk_person_typedoc FOREIGN KEY (id_type_doc) REFERENCES type_document(id),
+    CONSTRAINT fk_person_idrol FOREIGN KEY (id_rol_person) REFERENCES rol_person (id)
 );
 
 CREATE TABLE status_applicant(
@@ -49,10 +59,11 @@ CREATE TABLE applicant (
 
 );
 
-CREATE TABLE admission_test (
+CREATE TABLE score_admission_test (
     id INT AUTO_INCREMENT,
     id_applicant INT,
     score FLOAT(5,2),
+    date_register DATETIME,
 
 
     CONSTRAINT pk_admission_test PRIMARY KEY (id),

@@ -2,14 +2,22 @@ package com.registronota.applicant.domain.entity.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.registronota.persona.domain.entity.dto.PersonOutDTO;
 import com.registronota.statusapplicant.domain.entity.StatusApplicant;
 
 public class ApplicantOutDTO{
 
+    @JsonProperty("id_applicant")
     private int id;
+
+    @JsonProperty("status")
     private StatusApplicant statusApplicant;
+
+    @JsonProperty("person")
     private PersonOutDTO personOutDTO;
+
+    @JsonProperty("date_entry")
     private LocalDate dateEntry;
     
     
@@ -57,7 +65,6 @@ public class ApplicantOutDTO{
                 + ", dateEntry=" + dateEntry + "]";
     }
    
-    // to String 
 
     
 

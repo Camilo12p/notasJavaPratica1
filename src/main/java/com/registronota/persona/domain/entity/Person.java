@@ -3,6 +3,7 @@ package com.registronota.persona.domain.entity;
 import java.time.LocalDate;
 
 import com.registronota.persona.domain.entity.dto.PersonEntraceDTO;
+import com.registronota.rolPerson.domain.entity.RolPerson;
 import com.registronota.typedoc.domain.entity.TypeDocument;
 
 public class Person {
@@ -15,6 +16,7 @@ public class Person {
     private String email;
     private String password;
     private long phoneNumber;
+    private RolPerson rolPerson;
     
     
     
@@ -30,7 +32,7 @@ public class Person {
 
     // methods
 
-    public Person(PersonEntraceDTO personEntraceDTO, TypeDocument typeDocument){
+    public Person(PersonEntraceDTO personEntraceDTO, TypeDocument typeDocument, RolPerson rolPerson){
         this.id = personEntraceDTO.getId();
         this.TypeDocument = typeDocument;
         this.name = personEntraceDTO.getName();
@@ -39,6 +41,7 @@ public class Person {
         this.email = personEntraceDTO.getEmail();
         this.password = personEntraceDTO.getPassword();
         this.phoneNumber = personEntraceDTO.getPhoneNumber();
+        this.rolPerson = rolPerson;
     }
 
     public Person
@@ -49,7 +52,8 @@ public class Person {
         String lastName,
         LocalDate birthDate,
         int phoneNumber,
-        String password
+        String password,
+        RolPerson rolPerson
     ){
         this.id = id;
         this.TypeDocument = TypeDocument;
@@ -58,6 +62,7 @@ public class Person {
         this.birthDate = birthDate;
         this.phoneNumber = phoneNumber;
         this.password = password;
+        this.rolPerson = rolPerson;
 
     }
     
@@ -121,6 +126,17 @@ public class Person {
         this.password = password;
     }
 
+    public RolPerson getRolPerson() {
+        return rolPerson;
+    }
+
+
+
+    public void setRolPerson(RolPerson rolPerson) {
+        this.rolPerson = rolPerson;
+    }
+    
+    // toString
     @Override
     public String toString() {
         return "Person [id=" + id + ", TypeDocument=" + TypeDocument + ", name=" + name + ", lastName=" + lastName
@@ -128,8 +144,7 @@ public class Person {
                 + phoneNumber + "]";
     }
 
-    
-    // toString
+
 
     
     
